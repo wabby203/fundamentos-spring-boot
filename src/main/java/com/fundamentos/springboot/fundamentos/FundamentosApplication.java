@@ -17,6 +17,8 @@ public class FundamentosApplication implements CommandLineRunner {
 	private ComponentDependency componentDependency;
 	private MyBean myBean;
 	private MyBeanWithDependency myBeanWithDependency;
+	/*con el qualifer podemos escoger entre las dependencias que queremos llamar en este caso es componentImplement y componentTwoImplement
+	* siempre se genera el contructur y se agregan las interfases de las dependencias que estemos usando  */
 	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency)
 	{
 		this.componentDependency = componentDependency;
@@ -29,7 +31,8 @@ public class FundamentosApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		componentDependency.saludadar();
+		/*esta parte se usa como el ejecutador de los metodos de las diferentes dependencias */
+		componentDependency.saludadar(); /* este metodo es un llamado desde diferenrtes dependencias*/
 		myBean.print();
 		myBeanWithDependency.printWithDependency();
 	}
