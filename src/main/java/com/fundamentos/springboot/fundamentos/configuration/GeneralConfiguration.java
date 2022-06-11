@@ -4,9 +4,12 @@ import com.fundamentos.springboot.fundamentos.bean.MyBeanWithProperties;
 import com.fundamentos.springboot.fundamentos.bean.MyBeanWithPropertiesImplement;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pojo.UserPojo;
+
+import javax.sql.DataSource;
 
 @EnableConfigurationProperties(UserPojo.class)
 @Configuration
@@ -24,5 +27,17 @@ public class GeneralConfiguration {
     public MyBeanWithProperties function ()
     {
         return  new MyBeanWithPropertiesImplement(name, apellido);
+    }
+
+    /*este metododo es para manejar una bd desde myConfiguraciones */
+    @Bean
+    public DataSource dataSource ()
+    {
+        DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+        dataSourceBuilder.driverClassName("org.h2.Driver");
+        dataSourceBuilder.url("jdbc:h2:mem:testdb");
+        dataSourceBuilder.username("saturno");
+        dataSourceBuilder.password("");
+        return dataSourceBuilder.build();
     }
 }

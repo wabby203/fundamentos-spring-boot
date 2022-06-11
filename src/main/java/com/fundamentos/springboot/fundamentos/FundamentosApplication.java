@@ -4,18 +4,17 @@ import com.fundamentos.springboot.fundamentos.bean.MyBean;
 import com.fundamentos.springboot.fundamentos.bean.MyBeanWithDependency;
 import com.fundamentos.springboot.fundamentos.bean.MyBeanWithProperties;
 import com.fundamentos.springboot.fundamentos.component.ComponentDependency;
-import org.apache.juli.logging.Log;
-import org.apache.juli.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pojo.UserPojo;
-/*@Slf4j*/
+@Slf4j
 @SpringBootApplication
 public class FundamentosApplication implements CommandLineRunner {
 
-private final Log logger = LogFactory.getLog(FundamentosApplication.class);
+/*private final Log logger = LogFactory.getLog(FundamentosApplication.class);*/
 /*	@Autowired */
 	private ComponentDependency componentDependency;
 	private MyBean myBean;
@@ -47,7 +46,6 @@ private final Log logger = LogFactory.getLog(FundamentosApplication.class);
 		myBeanWithDependency.printWithDependency();
 		System.out.println(myBeanWithProperties.function());
 		System.out.println(userPojo.getEmail() + " - " + userPojo.getPwd() + " - " + userPojo.getAge());
-		logger.error("este es un mensaje de error desde la opcion del logger");
-
+		log.info("log tipo info ");
 	}
 }
