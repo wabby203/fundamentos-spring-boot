@@ -4,15 +4,18 @@ import com.fundamentos.springboot.fundamentos.bean.MyBean;
 import com.fundamentos.springboot.fundamentos.bean.MyBeanWithDependency;
 import com.fundamentos.springboot.fundamentos.bean.MyBeanWithProperties;
 import com.fundamentos.springboot.fundamentos.component.ComponentDependency;
-import lombok.extern.slf4j.Slf4j;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import pojo.UserPojo;
-@Slf4j
+/*@Slf4j*/
 @SpringBootApplication
 public class FundamentosApplication implements CommandLineRunner {
+
+private final Log logger = LogFactory.getLog(FundamentosApplication.class);
 /*	@Autowired */
 	private ComponentDependency componentDependency;
 	private MyBean myBean;
@@ -38,12 +41,13 @@ public class FundamentosApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		log.info("este es un log qpara mis pruebas");
 		/*esta parte se usa como el ejecutador de los metodos de las diferentes dependencias */
 		componentDependency.saludadar(); /* este metodo es un llamado desde diferenrtes dependencias*/
 		myBean.print();
 		myBeanWithDependency.printWithDependency();
 		System.out.println(myBeanWithProperties.function());
 		System.out.println(userPojo.getEmail() + " - " + userPojo.getPwd() + " - " + userPojo.getAge());
+		logger.error("este es un mensaje de error desde la opcion del logger");
+
 	}
 }
