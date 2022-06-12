@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Sort;
 import pojo.UserPojo;
 
 import java.time.LocalDate;
@@ -51,8 +52,20 @@ public class FundamentosApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		//ejemplosAnt ();
 		saveUsersInDB();
+		getInformationJpqlFromUser();
 	}
 
+	private void getInformationJpqlFromUser()
+	{
+		log.info("el email elegido es: "+
+				userRepocitory.findByUserEmail("wabb@domain.com").orElseThrow(()-> new RuntimeException("No se encontro el usuario")));
+
+		/*Ejemplo para ordenar a partir de un parametro enviado haciendo uso de jpql*/
+		userRepocitory.findAndSort("Ga", Sort.by("id").descending())
+				.stream()
+				.forEach(user->log.info("usuario con metodo sort "+user));
+
+	}
 	private void saveUsersInDB()
 	{
 		User user1 = new User("Gaby", "wabb@domain.com", LocalDate.of(2021, 3, 20));
@@ -64,7 +77,10 @@ public class FundamentosApplication implements CommandLineRunner {
 		User user7 = new User("Enrique", "enrique@domain.com", LocalDate.of(2021, 11, 12));
 		User user8 = new User("Luis", "luis@domain.com", LocalDate.of(2021, 2, 27));
 		User user9 = new User("Paola", "paola@domain.com", LocalDate.of(2021, 4, 10));
-		List<User> listUsers  = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9);
+		User user10 = new User("Gaby2", "wabby@domain.com", LocalDate.of(2021, 3, 20));
+
+		List<User> listUsers  = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9, user10);
+
 		userRepocitory.saveAll(listUsers);
 		//List.stream().forEach(userRepocitory::save);
 	}
