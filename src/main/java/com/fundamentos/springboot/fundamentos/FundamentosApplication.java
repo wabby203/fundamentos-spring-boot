@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.domain.Sort;
 import pojo.UserPojo;
 
 import java.time.LocalDate;
@@ -57,11 +56,11 @@ public class FundamentosApplication implements CommandLineRunner {
 
 	private void getInformationJpqlFromUser()
 	{
-		log.info("el email elegido es: "+
-				userRepocitory.findByUserEmail("wabb@domain.com").orElseThrow(()-> new RuntimeException("No se encontro el usuario")));
+	/*	log.info("el email elegido es: "+
+				userRepocitory.findByUserEmail("wabb@domain.com").orElseThrow(()-> new RuntimeException("No se encontro el usuario")));*/
 
 		/*Ejemplo para ordenar a partir de un parametro enviado haciendo uso de jpql*/
-		userRepocitory.findAndSort("Ga", Sort.by("id").descending())
+	/*	userRepocitory.findAndSort("Ga", Sort.by("id").descending())
 				.stream()
 				.forEach(user->log.info("usuario con metodo sort "+user));
 
@@ -69,7 +68,26 @@ public class FundamentosApplication implements CommandLineRunner {
 				.stream()
 				.forEach(user->log.info("usuario con query metod " + user));
 		log.info("usuario con query metod con findByEmailAndName "+userRepocitory.findByEmailAndName("wabb@domain.com", "Gaby")
-				.orElseThrow(()-> new RuntimeException("usuario no encontrado con el ")));
+				.orElseThrow(()-> new RuntimeException("usuario no encontrado con el "))); */
+
+		/*Uso de Query methods con Or, and, OrderBy, Between, Sort*/
+		/*userRepocitory.findByNameLike("%G%")
+				.stream()
+				.forEach(user->log.info("usuario findby-nameLike " + user));
+
+		userRepocitory.findByNameOrEmail(null, "wabb@domain.com")
+				.stream()
+				.forEach(user->log.info("usuario findby-nameOrEmail " + user));/*
+
+		/*Uso de Query methods que encuentre informacion a partir de un intervalo de fecha que tenemos mapeada en la endtidad*/
+		userRepocitory.findByBirthdayBetween(LocalDate.of(2021, 3, 20), LocalDate.of(2021,10,20))
+				.stream()
+				.forEach(user->log.info("usuario con intervalo de fechas "+user));
+
+		/*Uso de Query methods para ordenar los datos que estamos tmanejando*/
+		userRepocitory.findByNameLikeOrderByIdDesc("%Gaby%")
+				.stream()
+				.forEach(user->log.info("usuario encontrado con like y ordenado " + user));
 	}
 	private void saveUsersInDB()
 	{
