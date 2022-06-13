@@ -6,6 +6,7 @@ import com.fundamentos.springboot.fundamentos.bean.MyBeanWithProperties;
 import com.fundamentos.springboot.fundamentos.component.ComponentDependency;
 import com.fundamentos.springboot.fundamentos.entity.User;
 import com.fundamentos.springboot.fundamentos.repository.UserRepocitory;
+import com.fundamentos.springboot.fundamentos.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -30,11 +31,12 @@ public class FundamentosApplication implements CommandLineRunner {
 	private MyBeanWithProperties myBeanWithProperties;
 	private UserPojo userPojo;
 	private UserRepocitory userRepocitory;
+	private UserService userService;
 
 	/*con el qualifer podemos escoger entre las dependencias que queremos llamar en este caso es componentImplement y componentTwoImplement
 	* siempre se genera el contructur y se agregan las interfases de las dependencias que estemos usando  */
 	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency, MyBean myBean, MyBeanWithDependency myBeanWithDependency, MyBeanWithProperties myBeanWithProperties
-	, UserPojo userPojo, UserRepocitory userRepocitory)
+	, UserPojo userPojo, UserRepocitory userRepocitory, UserService userService)
 	{
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
@@ -42,6 +44,8 @@ public class FundamentosApplication implements CommandLineRunner {
 		this.myBeanWithProperties =myBeanWithProperties;
 		this.userPojo = userPojo;
 		this.userRepocitory = userRepocitory;
+		this.userService = userService;
+
 	}
 	public static void main(String[] args) {
 		SpringApplication.run(FundamentosApplication.class, args);
@@ -52,8 +56,27 @@ public class FundamentosApplication implements CommandLineRunner {
 		//ejemplosAnt ();
 		saveUsersInDB();
 		getInformationJpqlFromUser();
+		saveWithErrorTransactional();
 	}
 
+	private void 	saveWithErrorTransactional()
+	{
+		User test2 = new User("Test1Transactional", "Test1Transactional@domain.com", LocalDate.of(2021,10,20));
+		User test3 = new User("Test2Transactional", "Test2Transactional@domain.com", LocalDate.of(2021,10,20));
+		User test4 = new User("Test3Transactional", "Test3Transactional@domain.com", LocalDate.of(2021,10,20));
+		User test1 = new User("Test4Transactional", "Test4Transactional@domain.com", LocalDate.of(2021,10,20));
+		List<User> users = Arrays.asList(test1, test2, test3, test4);
+
+		try{
+			userService.saveTransactional(users);
+		}catch (Exception e){
+			log.error("Esta es una excepcion dentro del metodo transational" + e);
+		}
+		userService.getAllUsers()
+				.stream()
+				.forEach(user -> log.info("Este es el usuario dentro del metodo Transational :" + user));
+
+	}
 	private void getInformationJpqlFromUser()
 	{
 	/*	log.info("el email elegido es: "+
@@ -92,6 +115,7 @@ public class FundamentosApplication implements CommandLineRunner {
 		/*Uso de JPQL con named parameters*/
 	/*	log.info("El usuario a partir del name parameter es: "+userRepocitory.getAllByBirthdayAndEmail(LocalDate.of(2021, 3, 20), "wabb@domain.com")
 				.orElseThrow(()->new RuntimeException("no se encontro el usuario a partir de named parameter ")));*/
+
 	}
 	private void saveUsersInDB()
 	{
