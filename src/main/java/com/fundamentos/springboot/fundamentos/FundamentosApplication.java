@@ -88,6 +88,10 @@ public class FundamentosApplication implements CommandLineRunner {
 		userRepocitory.findByNameLikeOrderByIdDesc("%Gaby%")
 				.stream()
 				.forEach(user->log.info("usuario encontrado con like y ordenado " + user));
+
+		/*Uso de JPQL con named parameters*/
+	/*	log.info("El usuario a partir del name parameter es: "+userRepocitory.getAllByBirthdayAndEmail(LocalDate.of(2021, 3, 20), "wabb@domain.com")
+				.orElseThrow(()->new RuntimeException("no se encontro el usuario a partir de named parameter ")));*/
 	}
 	private void saveUsersInDB()
 	{
