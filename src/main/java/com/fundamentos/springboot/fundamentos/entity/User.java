@@ -1,6 +1,7 @@
 package com.fundamentos.springboot.fundamentos.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference /*es para que al acceder a este servicio a nivel de servicio rest no nos de un error */
+    @JsonIgnore
     private List<Post> posts = new ArrayList<>();
 
     public User() {
