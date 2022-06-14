@@ -2,8 +2,8 @@ package com.fundamentos.springboot.fundamentos.repository;
 
 import com.fundamentos.springboot.fundamentos.entity.User;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepocitory extends JpaRepository<User, Long> {
+public interface UserRepocitory extends PagingAndSortingRepository<User, Long> {
 
     /*este es un query de jppql donde u es como el apode de user y ?1 es la espera de un parametro*/
 @Query ("Select u from User u where u.email=?1")
@@ -44,5 +44,6 @@ public interface UserRepocitory extends JpaRepository<User, Long> {
 
     Optional<UserDto> getAllByBirthdayAndEmail(@Param("pramamFecha") LocalDate date, @Param("paramEmail") String email);*/
 
+    List<User> findAll();
 
 }
